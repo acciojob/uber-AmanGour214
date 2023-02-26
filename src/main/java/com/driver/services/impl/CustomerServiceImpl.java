@@ -81,7 +81,10 @@ public class CustomerServiceImpl implements CustomerService {
 
 		// if we are here then we can say that driver and cab is present;
 		cab.setAvailable(false);
-		Driver driver= driverRepository2.findById(lowestId).get();
+		Driver driver=null;
+		if(isPresent==true) {
+			driver = driverRepository2.findById(lowestId).get();
+		}
 
 
 		tripBooking.setFromLocation(fromLocation);
