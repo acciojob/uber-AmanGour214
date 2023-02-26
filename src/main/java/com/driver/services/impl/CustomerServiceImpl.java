@@ -66,6 +66,7 @@ public class CustomerServiceImpl implements CustomerService {
 		int lowestId=Integer.MAX_VALUE;
 		boolean isPresent=false;
 		Cab cab=null;
+		Driver driver2=null;
 
 
 		List<Driver>driverList=driverRepository2.findAll();
@@ -73,6 +74,7 @@ public class CustomerServiceImpl implements CustomerService {
 			if(lowestId>driver.getDriverId()&&driver.getCab().getAvailable()==true){
 				lowestId=driver.getDriverId();
 				isPresent=true;
+				driver2=driver;
 				cab=driver.getCab();
 			}
 		}
@@ -81,10 +83,10 @@ public class CustomerServiceImpl implements CustomerService {
 
 		// if we are here then we can say that driver and cab is present;
 		cab.setAvailable(false);
-		Driver driver=null;
-		if(isPresent==true) {
-			driver = driverRepository2.findById(lowestId).get();
-		}
+		//Driver driver=null;
+		//if(isPresent==true) {
+//			driver2 = driverRepository2.findById(lowestId).get();
+//
 
 
 		tripBooking.setFromLocation(fromLocation);
@@ -93,15 +95,15 @@ public class CustomerServiceImpl implements CustomerService {
 		tripBooking.setStatus(TripStatus.CONFIRMED);
 		tripBooking.setBill((distanceInKm) * (cab.getPerKmRate()));
 		//forigen key
-		tripBooking.setDriver( driver);
+		tripBooking.setDriver( driver2);
 		tripBooking.setCustomer(customer);
 
 		// question of setting the forigin key
 
-		driver.getTripBookingList().add(tripBooking);
+		driver2.getTripBookingList().add(tripBooking);
 		customer.getTripBookingList().add(tripBooking);
 
-		driverRepository2.save(driver);
+		driverRepository2.save(driver2);
 
 		customerRepository2.save(customer);
 
